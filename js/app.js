@@ -44,9 +44,9 @@ startXHR(HTTP_METHOD.GET, peopleObj.species, function() {
   let speciesObj = JSON.parse(this.responseText);
   const peopleSpecies = document.createElement('p');
   peopleSpecies.innerHTML = speciesObj.name;
-    peopleContainer.appendChild(peopleName);
-    peopleContainer.appendChild(peopleGender);
-    peopleContainer.appendChild(peopleSpecies);
+  peopleContainer.appendChild(peopleName);
+  peopleContainer.appendChild(peopleGender);
+  peopleContainer.appendChild(peopleSpecies);
 
   if(contentDiv.children.length === 0) {
     contentDiv.appendChild(peopleContainer);
@@ -72,17 +72,27 @@ function planetsReq() {
     const planetsPopulation = document.createElement('p');
     planetsPopulation.innerHTML = planetsObj.population;
 
-    //film names in li wrapped in ul
-    startXHR(HTTP_METHOD.GET, peopleObj.species, function() {
-      let speciesObj = JSON.parse(this.responseText);
-      const peopleSpecies = document.createElement('p');
-      peopleSpecies.innerHTML = speciesObj.name;
-      contentDiv.appendChild(peopleSpecies);
-    });
+    const planetContainer = document.createElement('div');
 
-    contentDiv.appendChild(planetsName);
-    contentDiv.appendChild(planetsTerrain);
-    contentDiv.appendChild(planetsPopulation);
+    const planetFilmUl = document.createElement('ul');
+
+    //film names in li wrapped in ul
+    for(let i = 0; i < planetsObj.films.length; i++) {
+      startXHR(HTTP_METHOD.GET, planetsObj[i].films, function() {
+        let filmObj = JSON.parse(this.responseText);
+        const planetFilm = document.createElement('li');
+        planetFilm.innerHTML = filmObj.name;
+        contentDiv.appendChild(planetsName);
+        contentDiv.appendChild(planetsTerrain);
+        contentDiv.appendChild(planetsPopulation);
+        contentDiv.appendChild(planetFilm);
+        if(contentDiv.children.length === 0) {
+          contentDiv.appendChild(planetContainer);
+        } else {
+          contentDiv.replaceChild(planetContainer, contentDiv.children[0]);
+        }
+      });
+    }
   }
 
   reqBtn.addEventListener('click', function() {
