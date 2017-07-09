@@ -29,39 +29,71 @@ function peopleReq() {
     // name in h2
     // gender in p
     // first species value in a p
-  let peopleObj = JSON.parse(this.responseText);
+    let peopleObj = JSON.parse(this.responseText);
 
-const peopleName = document.createElement('h2');
-peopleName.innerHTML = peopleObj.name;
+    const peopleName = document.createElement('h2');
+    peopleName.innerHTML = peopleObj.name;
 
-const peopleGender = document.createElement('p');
-peopleGender.innerHTML = peopleObj.gender;
+    const peopleGender = document.createElement('p');
+    peopleGender.innerHTML = peopleObj.gender;
+
+    const peopleContainer = document.createElement('div');
 
 //only get first species and only the name
 startXHR(HTTP_METHOD.GET, peopleObj.species, function() {
   let speciesObj = JSON.parse(this.responseText);
   const peopleSpecies = document.createElement('p');
   peopleSpecies.innerHTML = speciesObj.name;
-contentDiv.appendChild(peopleSpecies);
-});
+    peopleContainer.appendChild(peopleName);
+    peopleContainer.appendChild(peopleGender);
+    peopleContainer.appendChild(peopleSpecies);
 
-contentDiv.appendChild(peopleName);
-contentDiv.appendChild(peopleGender);
+  if(contentDiv.children.length === 0) {
+    contentDiv.appendChild(peopleContainer);
+  } else {
+    contentDiv.replaceChild(peopleContainer, contentDiv.children[0]);
+  }
+});
 }
 
-reqBtn.addEventListener('click', function() {
-  if(dropDown.value === 'people') {
-    startXHR(HTTP_METHOD.GET, swapiPeople + input.value, peopleReq);
-
-
-  } else if (dropDown === 'planets') {
+function planetsReq() {
     //name in h2
     //terrain in p
     //population in p
-    //film names in li wrapped in ul
-    startXHR(HTTP_METHOD.GET, swapiPlanets + input.value, planetsReq);
 
-  } else if (dropDown === 'starships') {
+    let planetsObj = JSON.parse(this.responseText);
+
+    const planetsName = document.createElement('h2');
+    planetsName.innerHTML = planetsObj.name;
+
+    const planetsTerrain = document.createElement('p');
+    planetsTerrain.innerHTML = planetsObj.terrain;
+
+    const planetsPopulation = document.createElement('p');
+    planetsPopulation.innerHTML = planetsObj.population;
+
+    //film names in li wrapped in ul
+    startXHR(HTTP_METHOD.GET, peopleObj.species, function() {
+      let speciesObj = JSON.parse(this.responseText);
+      const peopleSpecies = document.createElement('p');
+      peopleSpecies.innerHTML = speciesObj.name;
+      contentDiv.appendChild(peopleSpecies);
+    });
+
+    contentDiv.appendChild(planetsName);
+    contentDiv.appendChild(planetsTerrain);
+    contentDiv.appendChild(planetsPopulation);
+  }
+
+  reqBtn.addEventListener('click', function() {
+    if(dropDown.value === 'people') {
+      startXHR(HTTP_METHOD.GET, swapiPeople + input.value, peopleReq);
+
+
+    } else if (dropDown === 'planets') {
+      startXHR(HTTP_METHOD.GET, swapiPlanets + input.value, planetsReq);
+
+    } else if (dropDown === 'starships') {
     //name in h2
     //manufacturer in p
     //starship class in p
