@@ -69,7 +69,6 @@ reqBtn.addEventListener('click', function() {
     peopleGender.innerHTML = data.gender;
 
     const peopleContainer = document.createElement('div');
-    console.log(data);
     peopleContainer.appendChild(peopleName);
     peopleContainer.appendChild(peopleGender);
 
@@ -90,14 +89,55 @@ reqBtn.addEventListener('click', function() {
     }
 
   });
-    // .then((data) => {
-    //   console.log(data);
-    // });
 
 
-  } else if (dropDown === 'planets') {
+  } else if (dropDown.value === 'planets') {
+    //name in h2
+    //terrain in p
+    //population in p
 
-  } else if (dropDown === 'starships') {
+    fetch(swapiPlanets + input.value)
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      const planetsName = document.createElement('h2');
+      planetsName.innerHTML = data.name;
+
+      const planetsTerrain = document.createElement('p');
+      planetsTerrain.innerHTML = data.terrain;
+
+      const planetsPopulation = document.createElement('p');
+      planetsPopulation.innerHTML = data.population;
+
+      const planetContainer = document.createElement('div');
+
+      const planetFilmUl = document.createElement('ul');
+//     //film names in li wrapped in ul
+
+      fetch(data.films)
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+      });
+
+      contentDiv.appendChild(planetsName);
+      contentDiv.appendChild(planetsTerrain);
+      contentDiv.appendChild(planetsPopulation);
+      contentDiv.appendChild(planetFilmUl);
+
+      if(contentDiv.children.length === 0) {
+        contentDiv.appendChild(planetContainer);
+      } else {
+        contentDiv.replaceChild(planetContainer, contentDiv.children[0]);
+      }
+
+    });
+
+
+  } else if (dropDown.value === 'starships') {
     //name in h2
     //manufacturer in p
     //starship class in p
