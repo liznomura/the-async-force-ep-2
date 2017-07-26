@@ -95,6 +95,8 @@ reqBtn.addEventListener('click', function() {
     //name in h2
     //terrain in p
     //population in p
+    //film names in li wrapped in ul
+    const planetContainer = document.createElement('div');
 
     fetch(swapiPlanets + input.value)
     .then((res) => {
@@ -108,34 +110,32 @@ reqBtn.addEventListener('click', function() {
       planetsTerrain.innerHTML = data.terrain;
 
       const planetsPopulation = document.createElement('p');
-      planetsPopulation.innerHTML = data.population;
-
-      const planetContainer = document.createElement('div');
+      planetsPopulation.innerHTML = 'Population: ' + data.population;
 
       const planetFilmUl = document.createElement('ul');
-//     //film names in li wrapped in ul
 
-      fetch(data.films)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
+      planetContainer.appendChild(planetsName);
+      planetContainer.appendChild(planetsTerrain);
+      planetContainer.appendChild(planetsPopulation);
+      planetContainer.appendChild(planetFilmUl);
+
+      data.films.forEach( film => {
+        fetch(film)
+        .then((res) => { return res.json(); })
+        .then((data) => {
+          const planetFilm = document.createElement('li');
+          planetFilm.innerHTML = data.title;
+          planetContainer.appendChild(planetFilm);
+        });
+
+        if(contentDiv.children.length === 0) {
+          console.log(contentDiv.children.length);
+          contentDiv.appendChild(planetContainer);
+        } else {
+          contentDiv.replaceChild(planetContainer, contentDiv.children[0]);
+        }
       });
-
-      contentDiv.appendChild(planetsName);
-      contentDiv.appendChild(planetsTerrain);
-      contentDiv.appendChild(planetsPopulation);
-      contentDiv.appendChild(planetFilmUl);
-
-      if(contentDiv.children.length === 0) {
-        contentDiv.appendChild(planetContainer);
-      } else {
-        contentDiv.replaceChild(planetContainer, contentDiv.children[0]);
-      }
-
     });
-
 
   } else if (dropDown.value === 'starships') {
     //name in h2
